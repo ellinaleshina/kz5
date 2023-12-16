@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User {{ .User.Username}}</title>
+</head>
+<body>
+<h1>User {{ .User.Username}} #{{ .User.ID}}</h1>
+<button type="button" onclick="sendRequest('DELETE')">Delete Profile</button>
+<button type="button"><a href="http://localhost:8080/users/{{ .User.ID }}/edit" style="text-decoration: none; color: black">Edit Profile</a></button><br>
+<h2>{{ .User.Username }}'s posts</h2>
+<table cellspacing="3" bgcolor="#000000">
+    <thead>
+    <tr bgcolor="#ffffff">
+        <th>POST ID</th>
+        <th>Posted on</th>
+        <th>Post Text</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {{ range .Posts}}
+
+    <tr bgcolor="#ffffff">
+
+        <td><a href="http://localhost:8080/posts/{{ .ID }}">{{ .ID}}</a></td>
+        <td>{{ .Posted.Format "Jan 02, 2006 15:04:05"}}</td>
+        <td>{{ .PostText}}</td>
+
+    </tr>
+
+    {{ end }}
+
+    </tbody>
+</table>
+<script>
+    function sendRequest(method) {
+        var xhr = new XMLHttpRequest();
+        const id = (parseInt(window.location.pathname.slice(7)))
+        var url = 'http://localhost:8080/api/users/' + id + '/delete';
+
+        xhr.open(method, url, true);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log('Request successful!');
+                console.log(xhr.responseText);
+            } else {
+                console.error('Request failed with status:', xhr.status);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Request failed');
+        };
+
+        xhr.send();
+        alert("User deleted")
+    }</script>
+</body>
+</html>

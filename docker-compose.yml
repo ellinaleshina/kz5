@@ -1,0 +1,31 @@
+# Docker Compose служит для сборки нескольких контейнеров
+# С помощью данного инструмента можно создать контейнер с приложением и БД, после чего запускать их вместе
+version: '3'
+services:
+  app:                            # Собираем сервис приложения
+    container_name: full_app
+    build: .
+    ports:
+      - 8080:8080                 # Явно указываем задействованные порты
+    restart: on-failure           # При ошибке выполняем перезапуск
+    depends_on:
+      - fullstack-postgres        # Указываем, что контейнер с приложением должен запуститься только после БД
+    networks:
+      - fullstack                 # Явно привязываем контейнер к внутреннему мосту между двумя сервисами
+
+
+  fullstack-postgres:             # Собираем сервис БД
+    image: postgres:latest
+    container_name: full_db_postgres
+    environment:                  # Указываем переменные окружения (пока явно, лучше шифровать)
+      - POSTGRES_USER=adm
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=aleshina
+    ports:                        # Пробрасываем порты из контейнера
+      - '5432:5432'
+    networks:                     # Привязываемся к той же сети
+      - fullstack
+
+networks:                         # Настраиваем сетевой мост, используемый для связи контейнеров
+  fullstack:
+    driver: bridge

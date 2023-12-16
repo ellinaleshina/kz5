@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+</head>
+<body>
+
+<form id="myForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <button type="button" onclick="sendRequest('PUT')">Изменить</button>
+</form>
+
+<script>
+    function sendRequest(method) {
+        var formData = new FormData(document.getElementById('myForm'));
+        var xhr = new XMLHttpRequest();
+        const id = (parseInt(window.location.pathname.slice(7)))
+        var url = 'http://localhost:8080/api/users/'+ id + '/edit';
+
+        xhr.open(method, url, true);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                console.log('Request successful!');
+                console.log(xhr.responseText);
+            } else {
+                console.error('Request failed with status:', xhr.status);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Request failed');
+        };
+
+        xhr.send(formData);
+        alert("User profile edited")
+    }
+</script>
+</body>
+</html>

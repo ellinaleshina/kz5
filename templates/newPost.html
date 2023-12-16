@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title}}</title>
+</head>
+<body>
+<h1>{{ .Title}}</h1>
+    <form id="NewPost" action="http://localhost:8080/api/posts/newpost" method="POST" enctype="multipart/form-data">
+        <label for="postText">Текст поста</label>
+        <input type="text" id="postText" name="postText" required>
+        <label for="author">ID автора</label>
+        <input type="number" id="author" name="author" required>
+        <button type="submit">Опубликовать</button>
+    </form>
+
+</body>
+</html>
